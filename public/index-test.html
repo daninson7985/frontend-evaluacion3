@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SportClub - Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0b61d6 0%, #3aa0ff 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        img {
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+        }
+        p {
+            color: #666;
+        }
+        .status {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/sportclub-logo.png" alt="SportClub" onerror="this.style.display='none'">
+        <h1>🎉 SportClub Frontend</h1>
+        <p>El servidor está funcionando correctamente</p>
+        <div class="status">
+            ✅ Servidor activo en http://localhost:5173
+        </div>
+        <p style="margin-top: 20px;">
+            <a href="http://localhost:5173/" style="color: #0b61d6; text-decoration: none; font-weight: bold;">
+                → Ir al sitio principal
+            </a>
+        </p>
+    </div>
+</body>
+</html>

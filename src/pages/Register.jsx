@@ -1,30 +1,35 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
-import { loginUser, saveSession } from "../services/authService";
+import { registerUser } from "../services/authService";
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    full_name: "",
+    email: "",
+    password: "",
+    role: "user"
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const response = await loginUser({ email, password });
-      saveSession(response.data.token, response.data.user);
-      
-      const role = response.data.user.role;
-      if (role === "admin") navigate("/admin/dashboard");
-      else if (role === "coach") navigate("/coach/dashboard");
-      else navigate("/user/dashboard");
-      
+      if (!formData.full_name || !formData.email || !formData.password) {
+        throw new Error("Todos los campos son obligatorios");
+      }
+      await registerUser(formData);
+      navigate("/login");
     } catch (err) {
-      setError(err.message || "Ocurrió un error");
+      setError(err.message || "Ocurrió un error al registrar");
     } finally {
       setLoading(false);
     }
@@ -33,7 +38,7 @@ function Login() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0b61d6 0%, #3aa0ff 100%)',
+      background: 'linear-gradient(135deg, #0ea95b 0%, #4ade80 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -45,21 +50,21 @@ function Login() {
         padding: '40px',
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
         width: '100%',
-        maxWidth: '380px'
+        maxWidth: '400px'
       }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <img 
             src="/sportclub-logo.png" 
             alt="SportClub" 
-            style={{ height: '60px', marginBottom: '20px' }} 
+            style={{ height: '60px', marginBottom: '20px' }}
             onError={(e) => e.target.style.display = 'none'}
           />
           <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
-            Iniciar Sesión
+            Crear Cuenta
           </h1>
           <p style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>
-            Accede a tu cuenta SportClub
+            Únete a la comunidad SportClub
           </p>
         </div>
 
@@ -72,12 +77,34 @@ function Login() {
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-4">
             <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#333' }}>
+              Nombre Completo
+            </Form.Label>
+            <Form.Control 
+              type="text" 
+              name="full_name"
+              value={formData.full_name} 
+              onChange={handleChange} 
+              required 
+              disabled={loading}
+              style={{
+                borderRadius: '8px',
+                padding: '12px',
+                border: '1px solid #ddd',
+                fontSize: '14px'
+              }}
+              placeholder="Juan Pérez"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#333' }}>
               Correo electrónico
             </Form.Label>
             <Form.Control 
               type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+              name="email"
+              value={formData.email} 
+              onChange={handleChange} 
               required 
               disabled={loading}
               style={{
@@ -96,8 +123,9 @@ function Login() {
             </Form.Label>
             <Form.Control 
               type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+              name="password"
+              value={formData.password} 
+              onChange={handleChange} 
               required 
               disabled={loading}
               style={{
@@ -114,7 +142,7 @@ function Login() {
             type="submit" 
             style={{
               width: '100%',
-              background: 'linear-gradient(135deg, #0b61d6 0%, #3aa0ff 100%)',
+              background: 'linear-gradient(135deg, #0ea95b 0%, #4ade80 100%)',
               border: 'none',
               padding: '12px',
               borderRadius: '8px',
@@ -126,45 +154,31 @@ function Login() {
             {loading ? (
               <>
                 <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" style={{ marginRight: '8px' }} /> 
-                Procesando...
+                Registrando...
               </>
-            ) : 'Ingresar'}
+            ) : 'Registrarse'}
           </Button>
         </Form>
 
         <div style={{ textAlign: 'center', marginTop: '24px' }}>
           <p style={{ color: '#666', fontSize: '14px', margin: '0 0 12px 0' }}>
-            ¿No tienes cuenta?
+            ¿Ya tienes cuenta?
           </p>
           <Link 
-            to="/register" 
+            to="/login" 
             style={{
-              color: '#0b61d6',
+              color: '#0ea95b',
               textDecoration: 'none',
               fontWeight: '600',
               fontSize: '14px'
             }}
           >
-            Regístrate aquí
+            Inicia sesión aquí
           </Link>
-        </div>
-
-        {/* Demo Credentials */}
-        <div style={{
-          marginTop: '30px',
-          padding: '16px',
-          background: '#f0f4f8',
-          borderRadius: '8px',
-          fontSize: '12px',
-          color: '#666'
-        }}>
-          <p style={{ fontWeight: '600', marginBottom: '8px' }}>Demo (prueba rápida):</p>
-          <p style={{ margin: '4px 0' }}>👤 Admin: admin@sportclub.cl</p>
-          <p style={{ margin: '4px 0' }}>🔑 Pass: 123456</p>
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;

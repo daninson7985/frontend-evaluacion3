@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportClub - Registro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0ea95b 0%, #4ade80 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .register-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+        }
+        .logo {
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            padding: 10px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .form-control:focus {
+            border-color: #0ea95b;
+            box-shadow: 0 0 0 0.2rem rgba(14, 169, 91, 0.25);
+        }
+        .btn-register {
+            background: linear-gradient(135deg, #0ea95b 0%, #4ade80 100%);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-register:hover {
+            background: linear-gradient(135deg, #0d8a48 0%, #3a9d6e 100%);
+        }
+        .role-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .role-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        .role-option:hover {
+            border-color: #0ea95b;
+            background: #f0fdf4;
+        }
+        .role-option.selected {
+            border-color: #0ea95b;
+            background: #dcfce7;
+        }
+        .role-option input {
+            display: none;
+        }
+        .role-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+        .login-link p {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 12px 0;
+        }
+        .login-link a {
+            color: #0ea95b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 13px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #fee2e2;
+            border-radius: 6px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="/sportclub-logo.png" alt="SportClub" class="logo" style="max-height: 60px; width: auto; object-fit: contain;">
+            <h1 style="margin-top: 20px;">Crear Cuenta</h1>
+            <p class="subtitle">Únete a la comunidad SportClub</p>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <form id="registerForm">
+            <div class="mb-3">
+                <label for="fullName" class="form-label">Nombre Completo</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Juan Pérez" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="tu@email.com" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de Cuenta</label>
+                <div class="role-select">
+                    <label class="role-option selected">
+                        <input type="radio" name="role" value="user" checked>
+                        <p class="role-label">👤 Usuario</p>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="coach">
+                        <p class="role-label">🏋️ Coach</p>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-register">Registrarse</button>
+        </form>
+
+        <div class="login-link">
+            <p>¿Ya tienes cuenta?</p>
+            <a href="/login-test.html">Inicia sesión aquí</a>
+        </div>
+    </div>
+
+    <script>
+        // Role selection
+        document.querySelectorAll('.role-option input').forEach(input => {
+            input.addEventListener('change', function() {
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+                this.closest('.role-option').classList.add('selected');
+            });
+        });
+
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.display = 'none';
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            // Validaciones
+            if (!fullName) {
+                showError('El nombre es obligatorio');
+                return;
+            }
+            if (fullName.length < 3) {
+                showError('El nombre debe tener al menos 3 caracteres');
+                return;
+            }
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                showError('Ingresa un correo válido');
+                return;
+            }
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+
+            // Mock registration
+            console.log('Registro:', { fullName, email, password, role });
+            
+            // Guardar en localStorage
+            const users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+            const userExists = users.some(u => u.email === email);
+            
+            if (userExists) {
+                showError('Este correo ya está registrado');
+                return;
+            }
+
+            users.push({ full_name: fullName, email, password, role });
+            localStorage.setItem('sportclub_users', JSON.stringify(users));
+
+            // Mostrar mensaje de éxito y redirigir
+            alert('¡Registro exitoso! Redirigiendo a login...');
+            window.location.href = '/login-test.html';
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>

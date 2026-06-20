@@ -1,13 +1,734 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sportclub-frondend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SportClub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* LOGIN PAGE */
+        .login-container {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #f0f2f5;
+        }
+        
+        
+        .login-left {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #0066cc 100%);
+            background-image: url('/login-bg.png');
+            background-size: 70%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            image-rendering: -webkit-optimize-contrast;
+        }
+        
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 102, 204, 0.15);
+            z-index: 1;
+        }
+        
+        .login-left-content { position: relative; z-index: 2; text-align: center; }
+        .login-left-content h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; }
+        .login-left-content p { font-size: 18px; opacity: 0.9; line-height: 1.6; margin-bottom: 30px; }
+        .sport-icons { display: flex; gap: 20px; justify-content: center; font-size: 48px; }
+        
+        .login-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-card .logo { height: 80px; margin-bottom: 30px; }
+        .login-card h2 { font-size: 32px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+        .login-card p { color: #666; margin-bottom: 30px; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s; }
+        .form-group input:focus { outline: none; border-color: #0099ff; box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1); }
+        
+        .btn-login { width: 100%; padding: 12px; background: linear-gradient(135deg, #0099ff, #00d4ff); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3); }
+        
+        .auth-link { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+        .auth-link a { color: #0099ff; text-decoration: none; font-weight: 600; cursor: pointer; }
+        
+        /* DASHBOARD */
+        .dashboard-container { min-height: 100vh; display: grid; grid-template-rows: 80px 1fr; background: #f5f7fa; }
+        
+        .dashboard-navbar {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .navbar-logo { height: 60px; width: auto; }
+        .navbar-right { display: flex; gap: 20px; align-items: center; color: white; }
+        .btn-header { padding: 8px 16px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+        .btn-header:hover { background: rgba(255,255,255,0.2); }
+        
+        .dashboard-main { display: grid; grid-template-columns: 220px 1fr; }
+        .sidebar { background: white; border-right: 1px solid #e0e0e0; padding: 20px 0; }
+        .sidebar-item { padding: 16px 24px; cursor: pointer; border-left: 4px solid transparent; transition: all 0.3s; font-weight: 500; color: #333; }
+        .sidebar-item:hover { background: #f5f7fa; border-left-color: #FF6B35; color: #FF6B35; }
+        
+        .content { padding: 40px; overflow-y: auto; }
+        .content h2 { font-size: 32px; font-weight: 700; color: #1a1a2e; margin-bottom: 30px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 4px solid #FF6B35;
+            transition: all 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
+        .stat-number { font-size: 36px; font-weight: 700; color: #FF6B35; }
+        .stat-label { color: #666; font-size: 14px; margin-top: 8px; }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .feature-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+        .feature-card-image { width: 100%; height: 160px; background: linear-gradient(135deg, #FF6B35, #F7931E); display: flex; align-items: center; justify-content: center; font-size: 60px; }
+        .feature-card-body { padding: 20px; }
+        .feature-card-body h3 { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px; }
+        .feature-card-body p { color: #666; font-size: 13px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+class App {
+    constructor() {
+        this.initializeDefaultUsers();
+        this.user = JSON.parse(localStorage.getItem('sportclub_auth') || 'null');
+        this.init();
+    }
+
+    initializeDefaultUsers() {
+        if (!localStorage.getItem('sportclub_users')) {
+            const defaultUsers = [
+                {full_name: 'Admin', email: 'admin@sportclub.cl', password: '123456', role: 'admin'},
+                {full_name: 'Juan Pérez', email: 'juan@mail.com', password: 'juan123', role: 'user'},
+                {full_name: 'Hatsune Miku', email: 'miku@sportclub.cl', password: 'miku123', role: 'coach'},
+                {full_name: 'María Usuario', email: 'maria@mail.com', password: 'maria123', role: 'user'}
+            ];
+            localStorage.setItem('sportclub_users', JSON.stringify(defaultUsers));
+        }
+    }
+
+    init() {
+        if (this.user) {
+            this.showDashboard();
+        } else {
+            this.showLogin();
+        }
+    }
+
+    showLogin() {
+        document.getElementById('app').innerHTML = `
+            <div class="login-container">
+                <div class="login-left">
+                    <div class="login-left-content">
+                        <h1>✩♬ ₊˚.🎧⋆☾⋆⁺₊✧</h1>
+                        <p>Tu plataforma de gestión deportiva. Conecta, entrena y compite.</p>
+                        <div class="sport-icons" style="font-size: 40px; gap: 30px;">
+                            <span>Fútbol</span>
+                            <span>Básquetbol</span>
+                            <span>Tenis</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="login-right">
+                    <div class="login-card">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <img src="/sportclub-logo.png" class="logo">
+                        </div>
+                        <h2>Iniciar Sesión</h2>
+                        <p>Accede a tu cuenta</p>
+                        <form onsubmit="app.handleLogin(event)">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Contraseña</label>
+                                <input type="password" id="loginPassword" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="btn-login" style="background: linear-gradient(135deg, #0099ff, #00d4ff);">Ingresar</button>
+                        </form>
+                        <div class="auth-link">
+                            <p>¿No tienes cuenta? <a onclick="app.showRegister(); return false;">Regístrate aquí</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    showRegister() {
+        document.getElementById('app').innerHTML = `
+           <div class="login-container">
+               <div class="login-left" style="background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #0066cc 100%); background-image: url('/login-bg.png'); background-size: 70%; background-position: center; background-repeat: no-repeat; background-attachment: fixed; image-rendering: -webkit-optimize-contrast;">
+                   <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 102, 204, 0.15); z-index: 1;"></div>
+                   <div class="login-left-content" style="position: relative; z-index: 2;">
+                       <h1>🥬🎤🎧🌐🩵🎙️</h1>
+                       <p>Crea tu cuenta y únete a nuestra comunidad deportiva.</p>
+                       <div class="sport-icons" style="font-size: 40px; gap: 30px;">
+                           <span>Entrenamiento</span>
+                           <span>Actividad</span>
+                           <span>Competencia</span>
+                       </div>
+                   </div>
+               </div>
+               <div class="login-right">
+                   <div class="login-card">
+                       <div style="text-align: center; margin-bottom: 30px;">
+                           <img src="/sportclub-logo.png" class="logo">
+                       </div>
+                       <h2>Crear Cuenta</h2>
+                       <p>Únete a nuestra plataforma</p>
+                       <form onsubmit="app.handleRegister(event)">
+                           <div class="form-group">
+                               <label>Nombre Completo</label>
+                               <input type="text" id="regName" placeholder="Tu nombre" required>
+                           </div>
+                           <div class="form-group">
+                               <label>Email</label>
+                               <input type="email" id="regEmail" placeholder="tu@email.com" required>
+                           </div>
+                           <div class="form-group">
+                               <label>Contraseña (6+ caracteres)</label>
+                               <input type="password" id="regPassword" placeholder="••••••••" required>
+                           </div>
+                           <input type="hidden" id="regRole" value="user">
+                           <button type="submit" class="btn-login" style="background: linear-gradient(135deg, #0099ff, #00d4ff);">Registrarse</button>
+                       </form>
+                       <div class="auth-link">
+                           <p>¿Ya tienes cuenta? <a onclick="app.showLogin(); return false;">Inicia sesión</a></p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+        `;
+    }
+
+    showDashboard() {
+        if (!this.user) return this.showLogin();
+        
+        let sidebar = `
+            <div class="sidebar-item" onclick="app.showDash()">Dashboard</div>
+            <div class="sidebar-item" onclick="app.showProfile()">Mi Perfil</div>
+        `;
+        
+        if (this.user.role === 'admin') {
+            sidebar += `<div class="sidebar-item" onclick="app.showUsers()">Gestionar Usuarios</div>`;
+        }
+
+        document.getElementById('app').innerHTML = `
+            <div class="dashboard-container">
+                <nav class="dashboard-navbar">
+                    <img src="/sportclub-logo.png" class="navbar-logo">
+                    <div class="navbar-right">
+                        <button class="btn-header" onclick="app.showProfile()">Mi Perfil</button>
+                        <button class="btn-header" onclick="app.logout()">Salir</button>
+                        <div style="padding: 8px 12px; background: rgba(255,255,255,0.1); border-radius: 6px; font-size: 12px;">
+                            <div style="font-weight: 600;">${this.user.full_name}</div>
+                            <div style="opacity: 0.8; text-transform: capitalize;">${this.user.role}</div>
+                        </div>
+                    </div>
+                </nav>
+                <div class="dashboard-main">
+                    <div class="sidebar">
+                        ${sidebar}
+                    </div>
+                    <div class="content" id="content"></div>
+                </div>
+            </div>
+        `;
+        
+        this.showDash();
+    }
+
+    showDash() {
+        let html = '<h2>Dashboard</h2>';
+        if (this.user.role === 'admin') {
+            let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+            let totalUsers = users.length;
+            let coachCount = users.filter(u => u.role === 'coach').length;
+            let userCount = users.filter(u => u.role === 'user').length;
+            
+            html += `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="font-size: 32px; margin-bottom: 8px;">👥</div>
+                        <div class="stat-number">${totalUsers}</div>
+                        <div class="stat-label">Total Usuarios</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #10b981;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">👤</div>
+                        <div class="stat-number" style="color: #10b981;">${userCount}</div>
+                        <div class="stat-label">Miembros</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #8b5cf6;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">👨‍🏫</div>
+                        <div class="stat-number" style="color: #8b5cf6;">${coachCount}</div>
+                        <div class="stat-label">Coaches</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px; margin-bottom: 20px; font-size: 20px; color: #1a1a2e;">Módulos del Sistema</h3>
+                <div class="features-grid">
+                    <div class="feature-card" onclick="app.showUsers()">
+                        <div class="feature-card-image" style="font-size: 48px;">👥</div>
+                        <div class="feature-card-body">
+                            <h3>Gestionar Usuarios</h3>
+                            <p>Crear, editar y eliminar usuarios del sistema. Asigna roles de Coach o Usuario.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-image" style="font-size: 48px;">📅</div>
+                        <div class="feature-card-body">
+                            <h3>Calendario</h3>
+                            <p>Visualiza todas las clases y eventos programados en el club.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-image" style="font-size: 48px;">📊</div>
+                        <div class="feature-card-body">
+                            <h3>Reportes</h3>
+                            <p>Genera reportes detallados de asistencia y desempeño de miembros.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (this.user.role === 'coach') {
+            html += `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="font-size: 32px; margin-bottom: 8px;">👥</div>
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Alumnos</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #10b981;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📅</div>
+                        <div class="stat-number" style="color: #10b981;">24</div>
+                        <div class="stat-label">Clases</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #8b5cf6;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">⭐</div>
+                        <div class="stat-number" style="color: #8b5cf6;">4.8</div>
+                        <div class="stat-label">Calificación</div>
+                    </div>
+                </div>
+                <h3 style="margin-top: 40px; margin-bottom: 20px; font-size: 20px; color: #1a1a2e;">Acciones Rápidas</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-card-image" style="font-size: 48px;">📝</div>
+                        <div class="feature-card-body">
+                            <h3>Mis Clases</h3>
+                            <p>Visualiza y gestiona tus clases programadas para esta semana.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-image" style="font-size: 48px;">👥</div>
+                        <div class="feature-card-body">
+                            <h3>Mis Alumnos</h3>
+                            <p>Accede al perfil y seguimiento de tus alumnos asignados.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📅</div>
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Clases Esta Semana</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #10b981;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">✓</div>
+                        <div class="stat-number" style="color: #10b981;">8</div>
+                        <div class="stat-label">Completadas</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #8b5cf6;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">⭐</div>
+                        <div class="stat-number" style="color: #8b5cf6;">25 pts</div>
+                        <div class="stat-label">Puntuación</div>
+                    </div>
+                </div>
+                <h3 style="margin-top: 40px; margin-bottom: 20px; font-size: 20px; color: #1a1a2e;">Próximas Actividades</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-card-image" style="font-size: 48px;">⚽</div>
+                        <div class="feature-card-body">
+                            <h3>Fútbol</h3>
+                            <p>Clase de fútbol - Martes 18:00 con Coach Hatsune</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-image" style="font-size: 48px;">🏀</div>
+                        <div class="feature-card-body">
+                            <h3>Básquetbol</h3>
+                            <p>Entrenamiento - Jueves 19:00 con Coach Hatsune</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        document.getElementById('content').innerHTML = html;
+    }
+
+    showProfile() {
+        const roleColors = {
+            'admin': '#8b5cf6',
+            'coach': '#10b981',
+            'user': '#FF6B35'
+        };
+        
+        const roleEmojis = {
+            'admin': '👑',
+            'coach': '🏋️',
+            'user': '👤'
+        };
+        
+        const color = roleColors[this.user.role] || '#FF6B35';
+        const emoji = roleEmojis[this.user.role] || '👤';
+        
+        let html = `
+            <h2>Perfil</h2>
+            <div style="background: white; border-radius: 12px; padding: 40px; max-width: 600px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="text-align: center; padding-bottom: 30px; border-bottom: 2px solid #e0e0e0;">
+                    <div style="font-size: 64px; margin-bottom: 16px;">${emoji}</div>
+                    <h3 style="font-size: 28px; color: #1a1a2e; margin-bottom: 8px;">${this.user.full_name}</h3>
+                    <span style="display: inline-block; background: ${color}; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; text-transform: uppercase; font-size: 12px;">${this.user.role}</span>
+                </div>
+                <div style="padding-top: 30px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                        <div>
+                            <div style="color: #666; font-size: 13px; margin-bottom: 6px;">CORREO</div>
+                            <div style="font-size: 16px; font-weight: 600; color: #1a1a2e;">${this.user.email}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px; margin-bottom: 6px;">ROL</div>
+                            <div style="font-size: 16px; font-weight: 600; color: #1a1a2e; text-transform: capitalize;">${this.user.role}</div>
+                        </div>
+                    </div>
+                    ${this.user.role === 'coach' ? `
+                        <div style="background: #f5f7fa; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                            <div style="color: #666; font-size: 13px; margin-bottom: 8px;">ESTADÍSTICAS</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div><strong>Alumnos:</strong> 12</div>
+                                <div><strong>Clases:</strong> 24</div>
+                            </div>
+                        </div>
+                    ` : this.user.role === 'user' ? `
+                        <div style="background: #f5f7fa; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                            <div style="color: #666; font-size: 13px; margin-bottom: 8px;">TU ACTIVIDAD</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div><strong>Clases Asistidas:</strong> 8</div>
+                                <div><strong>Puntuación:</strong> 25 pts</div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        document.getElementById('content').innerHTML = html;
+    }
+
+    showUsers() {
+        if (this.user.role !== 'admin') return;
+        
+        let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+        
+        const roleEmojis = {
+            'admin': '👑',
+            'coach': '🏋️',
+            'user': '👤'
+        };
+        
+        const roleColors = {
+            'admin': '#8b5cf6',
+            'coach': '#10b981',
+            'user': '#FF6B35'
+        };
+        
+        let rows = users.map(u => `
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 16px; font-weight: 600; color: #1a1a2e;">${roleEmojis[u.role]} ${u.full_name}</td>
+                <td style="padding: 16px; color: #666;">${u.email}</td>
+                <td style="padding: 16px;"><span style="background: ${roleColors[u.role]}; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; text-transform: uppercase;">${u.role}</span></td>
+                <td style="padding: 16px;">
+                    <button style="background: #FF6B35; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; margin-right: 6px;" onclick="app.editUser(0, '${u.full_name}', '${u.email}', '${u.role}')">✏️ Editar</button>
+                    <button style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;" onclick="app.deleteUser('${u.email}')">🗑️ Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
+        
+        let html = `
+            <h2>👥 Gestionar Usuarios</h2>
+            <button style="background: linear-gradient(135deg, #FF6B35, #F7931E); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 24px; font-size: 14px;" onclick="app.openAddUserModal()">➕ Nuevo Usuario</button>
+            <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f5f7fa; border-bottom: 2px solid #e0e0e0;">
+                            <th style="padding: 16px; text-align: left; font-weight: 600; color: #1a1a2e;">Nombre</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600; color: #1a1a2e;">Email</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600; color: #1a1a2e;">Rol</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600; color: #1a1a2e;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; padding: 16px; background: #f5f7fa; border-radius: 8px; color: #666; font-size: 13px;">
+                Total de usuarios: <strong>${users.length}</strong> | Coaches: <strong>${users.filter(u => u.role === 'coach').length}</strong> | Usuarios: <strong>${users.filter(u => u.role === 'user').length}</strong>
+            </div>
+        `;
+        document.getElementById('content').innerHTML = html;
+    }
+
+    openAddUserModal() {
+        Swal.fire({
+            title: 'Crear Usuario',
+            html: `
+                <input type="text" id="swalName" class="swal2-input" placeholder="Nombre" required>
+                <input type="email" id="swalEmail" class="swal2-input" placeholder="Email" required>
+                <input type="password" id="swalPass" class="swal2-input" placeholder="Contraseña (6+ caracteres)" required>
+                <select id="swalRole" class="swal2-input">
+                    <option value="user">Usuario</option>
+                    <option value="coach">Coach</option>
+                    <option value="admin">Admin</option>
+                </select>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            preConfirm: () => {
+                const name = document.getElementById('swalName').value;
+                const email = document.getElementById('swalEmail').value;
+                const pass = document.getElementById('swalPass').value;
+                const role = document.getElementById('swalRole').value;
+                
+                if (!name || name.length < 3) {
+                    Swal.showValidationMessage('Nombre debe tener 3+ caracteres');
+                    return false;
+                }
+                if (!email.includes('@')) {
+                    Swal.showValidationMessage('Email inválido');
+                    return false;
+                }
+                if (!pass || pass.length < 6) {
+                    Swal.showValidationMessage('Contraseña debe tener 6+ caracteres');
+                    return false;
+                }
+                
+                let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+                users.push({full_name: name, email: email, password: pass, role: role});
+                localStorage.setItem('sportclub_users', JSON.stringify(users));
+                
+                return true;
+            }
+        }).then(r => {
+            if (r.isConfirmed) {
+                Swal.fire({icon: 'success', title: 'Guardado', timer: 1000, willClose: () => this.showUsers()});
+            }
+        });
+    }
+
+    editUser(id, name, email, role) {
+        Swal.fire({
+            title: 'Editar Usuario',
+            html: `
+                <input type="text" id="editName" class="swal2-input" value="${name}" placeholder="Nombre">
+                <input type="email" id="editEmail" class="swal2-input" value="${email}" placeholder="Email">
+                <select id="editRole" class="swal2-input">
+                    <option value="user" ${role === 'user' ? 'selected' : ''}>Usuario</option>
+                    <option value="coach" ${role === 'coach' ? 'selected' : ''}>Coach</option>
+                    <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+                </select>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar Cambios',
+            preConfirm: () => {
+                const newName = document.getElementById('editName').value;
+                const newEmail = document.getElementById('editEmail').value;
+                const newRole = document.getElementById('editRole').value;
+                
+                if (!newName || newName.length < 3) {
+                    Swal.showValidationMessage('Nombre debe tener 3+ caracteres');
+                    return false;
+                }
+                if (!newEmail.includes('@')) {
+                    Swal.showValidationMessage('Email inválido');
+                    return false;
+                }
+                
+                let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+                let userIndex = users.findIndex(u => u.email === email);
+                
+                if (userIndex !== -1) {
+                    users[userIndex] = {full_name: newName, email: newEmail, password: users[userIndex].password, role: newRole};
+                    localStorage.setItem('sportclub_users', JSON.stringify(users));
+                    return true;
+                }
+                return false;
+            }
+        }).then(r => {
+            if (r.isConfirmed) {
+                Swal.fire({icon: 'success', title: 'Actualizado', timer: 1000, willClose: () => this.showUsers()});
+            }
+        });
+    }
+
+    deleteUser(email) {
+        Swal.fire({
+            title: 'Eliminar',
+            text: 'Se eliminará: ' + email,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            confirmButtonText: 'Eliminar'
+        }).then(r => {
+            if (r.isConfirmed) {
+                let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+                users = users.filter(u => u.email !== email);
+                localStorage.setItem('sportclub_users', JSON.stringify(users));
+                Swal.fire({icon: 'success', title: 'Eliminado', timer: 1000, willClose: () => this.showUsers()});
+            }
+        });
+    }
+
+    handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        
+        let mockUsers = [
+            {email: 'admin@sportclub.cl', password: '123456', role: 'admin', full_name: 'Admin'},
+            {email: 'juan@mail.com', password: 'juan123', role: 'user', full_name: 'Juan'},
+            {email: 'coach@sportclub.cl', password: 'coach123', role: 'coach', full_name: 'Coach'}
+        ];
+        
+        let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+        let found = mockUsers.concat(users).find(u => u.email === email && u.password === pass);
+        
+        if (!found) {
+            Swal.fire({icon: 'error', title: 'Error', text: 'Credenciales inválidas'});
+            return;
+        }
+        
+        this.user = {email: found.email, role: found.role, full_name: found.full_name};
+        localStorage.setItem('sportclub_auth', JSON.stringify(this.user));
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Bienvenido',
+            text: found.full_name,
+            timer: 1000,
+            willClose: () => this.showDashboard()
+        });
+    }
+
+    handleRegister(e) {
+        e.preventDefault();
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const pass = document.getElementById('regPassword').value;
+        const role = document.getElementById('regRole').value;
+        
+        if (name.length < 3) {
+            Swal.fire({icon: 'error', title: 'Error', text: 'Nombre debe tener 3+ caracteres'});
+            return;
+        }
+        if (pass.length < 6) {
+            Swal.fire({icon: 'error', title: 'Error', text: 'Contraseña debe tener 6+ caracteres'});
+            return;
+        }
+        
+        let users = JSON.parse(localStorage.getItem('sportclub_users') || '[]');
+        if (users.some(u => u.email === email)) {
+            Swal.fire({icon: 'error', title: 'Error', text: 'Email ya existe'});
+            return;
+        }
+        
+        users.push({full_name: name, email: email, password: pass, role: role});
+        localStorage.setItem('sportclub_users', JSON.stringify(users));
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Registro exitoso',
+            text: 'Redirigiendo a login',
+            timer: 1500,
+            willClose: () => this.showLogin()
+        });
+    }
+
+    logout() {
+        Swal.fire({
+            title: 'Cerrar sesión',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            confirmButtonText: 'Sí'
+        }).then(r => {
+            if (r.isConfirmed) {
+                localStorage.removeItem('sportclub_auth');
+                this.user = null;
+                this.showLogin();
+            }
+        });
+    }
+}
+
+const app = new App();
+</script>
+</body>
 </html>

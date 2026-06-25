@@ -96,7 +96,17 @@ select {
 .home-page {
   min-height: 100vh;
   background: radial-gradient(circle at top left, #402470 0%, #09030c 50%, #020107 100%);
-  color: white;
+  color: #d8b5ff;
+}
+
+.home-page h1,
+.home-page h2,
+.home-page h3,
+.home-page h4,
+.home-page h5,
+.home-page h6,
+.home-page p {
+  color: #d8b5ff;
 }
 
 .home-header {
@@ -125,7 +135,7 @@ select {
 
 .home-link,
 .home-button {
-  color: white;
+  color: #d8b5ff;
   text-decoration: none;
   font-weight: 700;
   padding: 12px 20px;
@@ -165,7 +175,7 @@ select {
 .home-description {
   font-size: 1.125rem;
   line-height: 1.8;
-  color: #d1c4ff;
+  color: #d8b5ff;
   margin-bottom: 36px;
 }
 

@@ -75,10 +75,10 @@ function Register() {
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         <img src="/soccer-field.png" alt="SportClub" style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '100vh' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(16, 6, 38, 0.88), rgba(107, 33, 168, 0.68))' }} />
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px', color: 'white' }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px', color: '#d8b5ff' }}>
           <img src="/sportclub-logo.png" alt="SportClub" style={{ width: 'auto', maxWidth: '240px', height: 'auto', marginBottom: '24px' }} onError={(e) => e.target.style.display = 'none'} />
-          <h1 style={{ fontSize: '44px', lineHeight: '1.05', margin: 0, maxWidth: '520px' }}>Crea tu cuenta y empieza tu transformación.</h1>
-          <p style={{ marginTop: '24px', fontSize: '17px', maxWidth: '520px', color: 'rgba(255,255,255,0.88)' }}>
+          <h1 style={{ fontSize: '44px', lineHeight: '1.05', margin: 0, maxWidth: '520px', color: '#d8b5ff' }}>Crea tu cuenta y empieza tu transformación.</h1>
+          <p style={{ marginTop: '24px', fontSize: '17px', maxWidth: '520px', color: '#d8b5ff' }}>
             Únete a SportClub para gestionar tus reservas, ver tus avances y entrenar con los mejores coaches.
           </p>
         </div>
@@ -89,7 +89,7 @@ function Register() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
             <div>
               <h2 style={{ fontSize: '30px', margin: 0, color: '#f2c94c' }}>Crear cuenta</h2>
-              <p style={{ marginTop: '12px', color: '#c9c7d1', marginBottom: 0 }}>Registra tus datos y comienza a usar SportClub.</p>
+              <p style={{ marginTop: '12px', color: '#d8b5ff', marginBottom: 0 }}>Registra tus datos y comienza a usar SportClub.</p>
             </div>
             <Link to="/" style={{ backgroundColor: '#f2c94c', color: '#1a1a1a', padding: '10px 18px', borderRadius: '999px', textDecoration: 'none', fontWeight: '700', border: '1px solid #f2c94c', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               Inicio
@@ -104,7 +104,7 @@ function Register() {
 
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Nombre completo</Form.Label>
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#d8b5ff' }}>Nombre completo</Form.Label>
               <Form.Control
                 type="text"
                 name="full_name"
@@ -117,7 +117,7 @@ function Register() {
               />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Correo electrónico</Form.Label>
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#d8b5ff' }}>Correo electrónico</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
@@ -130,7 +130,7 @@ function Register() {
               />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Contraseña (mayúscula y carácter especial)</Form.Label>
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#d8b5ff' }}>Contraseña (mayúscula y carácter especial)</Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showPassword ? "text" : "password"}
@@ -169,7 +169,7 @@ function Register() {
           </Form>
 
           <div style={{ textAlign: 'center', marginTop: '24px' }}>
-            <p style={{ marginBottom: '12px', color: '#a8a5b6' }}>¿Ya tienes cuenta?</p>
+            <p style={{ marginBottom: '12px', color: '#d8b5ff' }}>¿Ya tienes cuenta?</p>
             <Link to="/login" style={{ backgroundColor: '#f2c94c', color: '#1a1a1a', padding: '12px 22px', borderRadius: '999px', textDecoration: 'none', fontWeight: '700', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #f2c94c' }}>
               Inicia sesión aquí
             </Link>

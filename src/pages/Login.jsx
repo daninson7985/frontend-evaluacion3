@@ -36,10 +36,10 @@ function Login() {
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         <img src="/sports-hero.png" alt="SportClub" style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '100vh' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(16, 6, 38, 0.88), rgba(72, 16, 103, 0.64))' }} />
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px', color: 'white' }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px', color: '#d8b5ff' }}>
         <img src="/sportclub-logo.png" alt="SportClub" style={{ width: 'auto', maxWidth: '240px', height: 'auto', marginBottom: '24px' }} onError={(e) => e.target.style.display = 'none'} />
-          <h1 style={{ fontSize: '44px', lineHeight: '1.05', margin: 0, maxWidth: '500px' }}>Entrena con foco, reserva tus clases y alcanza tus metas.</h1>
-          <p style={{ marginTop: '24px', fontSize: '17px', maxWidth: '520px', color: 'rgba(255,255,255,0.88)' }}>
+          <h1 style={{ fontSize: '44px', lineHeight: '1.05', margin: 0, maxWidth: '500px', color: '#d8b5ff' }}>Entrena con foco, reserva tus clases y alcanza tus metas.</h1>
+          <p style={{ marginTop: '24px', fontSize: '17px', maxWidth: '520px', color: '#d8b5ff' }}>
             Accede a tu espacio deportivo personal con SportClub y gestiona tus entrenamientos desde una experiencia oscura y moderna.
           </p>
         </div>
@@ -50,7 +50,7 @@ function Login() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
             <div>
               <h2 style={{ fontSize: '30px', margin: 0, color: '#f2c94c' }}>Iniciar sesión</h2>
-              <p style={{ marginTop: '12px', color: '#c9c7d1', marginBottom: 0 }}>Ingresa con tu correo y contraseña para acceder a tu panel.</p>
+              <p style={{ marginTop: '12px', color: '#d8b5ff', marginBottom: 0 }}>Ingresa con tu correo y contraseña para acceder a tu panel.</p>
             </div>
             <Link to="/" style={{ backgroundColor: '#f2c94c', color: '#1a1a1a', padding: '10px 18px', borderRadius: '999px', textDecoration: 'none', fontWeight: '700', border: '1px solid #f2c94c', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               Inicio
@@ -65,7 +65,7 @@ function Login() {
 
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Correo electrónico</Form.Label>
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#d8b5ff' }}>Correo electrónico</Form.Label>
               <Form.Control
                 type="email"
                 value={email}
@@ -77,7 +77,7 @@ function Login() {
               />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Contraseña</Form.Label>
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#d8b5ff' }}>Contraseña</Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showPassword ? "text" : "password"}
@@ -115,7 +115,7 @@ function Login() {
           </Form>
 
           <div style={{ textAlign: 'center', marginTop: '24px' }}>
-            <p style={{ marginBottom: '12px', color: '#a8a5b6' }}>¿No tienes cuenta?</p>
+            <p style={{ marginBottom: '12px', color: '#d8b5ff' }}>¿No tienes cuenta?</p>
             <Link to="/register" style={{ backgroundColor: '#f2c94c', color: '#1a1a1a', padding: '12px 22px', borderRadius: '999px', textDecoration: 'none', fontWeight: '700', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #f2c94c' }}>
               Regístrate aquí
             </Link>

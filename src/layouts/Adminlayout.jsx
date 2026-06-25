@@ -34,6 +34,7 @@ function AdminLayout() {
               <Link className="nav-link" to="/admin/coaches" style={{ color: 'white', fontWeight: '500' }}>Coaches</Link>
               <Link className="nav-link" to="/admin/classes" style={{ color: 'white', fontWeight: '500' }}>Clases</Link>
               <Link className="nav-link" to="/admin/specialties" style={{ color: 'white', fontWeight: '500' }}>Especialidades</Link>
+              <Link className="nav-link" to="/admin/sports" style={{ color: 'white', fontWeight: '500' }}>Deportes</Link>
               <Link className="nav-link" to="/admin/profile" style={{ color: 'white', fontWeight: '500' }}>Mi Perfil</Link>
               <Button variant="outline-light" onClick={handleLogout}>Cerrar Sesión</Button>
             </Nav>

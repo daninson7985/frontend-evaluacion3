@@ -12,6 +12,7 @@ import AdminClasses from "../pages/admin/AdminClasses";
 import AdminProfile from "../pages/admin/AdminProfile";
 import AdminSpecialties from "../pages/admin/AdminSpecialties";
 import AdminCoaches from "../pages/admin/AdminCoaches";
+import AdminSports from "../pages/admin/AdminSports";
 import UserDashboard from "../pages/user/UserDashboard";
 import UserProfile from "../pages/user/UserProfile";
 import UserClasses from "../pages/user/UserClasses";
@@ -39,6 +40,7 @@ function AppRoutes() {
           <Route path="classes" element={<AdminClasses />} />
           <Route path="coaches" element={<AdminCoaches />} />
           <Route path="specialties" element={<AdminSpecialties />} />
+          <Route path="sports" element={<AdminSports />} />
           <Route path="profile" element={<AdminProfile />} />
         </Route>
 

@@ -3,7 +3,7 @@
 Proyecto base para la evaluación de la Unidad 3 — aplicación SPA React para gestión de un centro deportivo.
 
 ## Integrantes
-- (Tu nombre aquí)
+- Daninson Parra
 
 ## Tecnologías
 - React 19

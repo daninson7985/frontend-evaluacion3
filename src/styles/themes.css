@@ -236,5 +236,18 @@ body {
   transform: translateY(-3px) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;
 }
-
-
+ 
+.btn-create-user {
+  background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+}
+ 
+.btn-create-user:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.16) !important;
+  opacity: 0.95 !important;
+}

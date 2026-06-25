@@ -28,9 +28,12 @@ function CoachLayout() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'white' }} />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Link className="nav-link" to="/coach/dashboard" style={{ color: 'white', fontWeight: '500' }}>Dashboard</Link>
+              <Link className="nav-link" to="/" style={{ color: 'white', fontWeight: '500' }}>Inicio</Link>
+              <Link className="nav-link" to="/coach/dashboard" style={{ color: 'white', fontWeight: '500' }}>Panel</Link>
               <Link className="nav-link" to="/coach/classes" style={{ color: 'white', fontWeight: '500' }}>Mis Clases</Link>
-              <span style={{ color: 'white', marginRight: '15px', display: 'flex', alignItems: 'center' }}>Mi Perfil: {user?.full_name}</span>
+              <Link className="nav-link" to="/coach/specialties" style={{ color: 'white', fontWeight: '500' }}>Especialidades</Link>
+              <Link className="nav-link" to="/coach/students" style={{ color: 'white', fontWeight: '500' }}>Alumnos</Link>
+              <Link className="nav-link" to="/coach/profile" style={{ color: 'white', fontWeight: '500' }}>Mi Perfil</Link>
               <Button variant="outline-light" onClick={handleLogout}>Cerrar Sesión</Button>
             </Nav>
           </Navbar.Collapse>

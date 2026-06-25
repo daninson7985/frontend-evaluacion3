@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert, Button, Form, Spinner } from "react-bootstrap";
+import { Alert, Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { loginUser, saveSession } from "../services/authService";
 
 function Login() {
@@ -9,6 +9,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,12 +18,11 @@ function Login() {
     try {
       const response = await loginUser({ email, password });
       saveSession(response.data.token, response.data.user);
-      
+
       const role = response.data.user.role;
       if (role === "admin") navigate("/admin/dashboard");
       else if (role === "coach") navigate("/coach/dashboard");
       else navigate("/user/dashboard");
-      
     } catch (err) {
       setError(err.message || "Ocurrió un error");
     } finally {
@@ -31,136 +31,94 @@ function Login() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0b61d6 0%, #3aa0ff 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
-    }}>
-      <div style={{
-        background: 'white',
-        borderRadius: '16px',
-        padding: '40px',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-        width: '100%',
-        maxWidth: '380px'
-      }}>
-        {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <img 
-            src="/sportclub-logo.png" 
-            alt="SportClub" 
-            style={{ height: '60px', marginBottom: '20px' }} 
-            onError={(e) => e.target.style.display = 'none'}
-          />
-          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
-            Iniciar Sesión
-          </h1>
-          <p style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>
-            Accede a tu cuenta SportClub
+    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr', background: '#08010f' }}>
+      <div style={{ position: 'relative', overflow: 'hidden' }}>
+        <img src="/sports-hero.png" alt="SportClub" style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '100vh' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(16, 6, 38, 0.88), rgba(72, 16, 103, 0.64))' }} />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px', color: 'white' }}>
+        <img src="/sportclub-logo.png" alt="SportClub" style={{ width: 'auto', maxWidth: '240px', height: 'auto', marginBottom: '24px' }} onError={(e) => e.target.style.display = 'none'} />
+          <h1 style={{ fontSize: '44px', lineHeight: '1.05', margin: 0, maxWidth: '500px' }}>Entrena con foco, reserva tus clases y alcanza tus metas.</h1>
+          <p style={{ marginTop: '24px', fontSize: '17px', maxWidth: '520px', color: 'rgba(255,255,255,0.88)' }}>
+            Accede a tu espacio deportivo personal con SportClub y gestiona tus entrenamientos desde una experiencia oscura y moderna.
           </p>
         </div>
+      </div>
 
-        {error && (
-          <Alert variant="danger" style={{ marginBottom: '20px', borderRadius: '8px' }}>
-            {error}
-          </Alert>
-        )}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', background: '#0a0611' }}>
+        <div style={{ width: '100%', maxWidth: '460px', background: '#110824', borderRadius: '28px', padding: '40px', boxShadow: '0 24px 80px rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+            <div>
+              <h2 style={{ fontSize: '30px', margin: 0, color: '#f2c94c' }}>Iniciar sesión</h2>
+              <p style={{ marginTop: '12px', color: '#c9c7d1', marginBottom: 0 }}>Ingresa con tu correo y contraseña para acceder a tu panel.</p>
+            </div>
+            <Link to="/" style={{ backgroundColor: '#f2c94c', color: '#1a1a1a', padding: '10px 18px', borderRadius: '999px', textDecoration: 'none', fontWeight: '700', border: '1px solid #f2c94c', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              Inicio
+            </Link>
+          </div>
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#333' }}>
-              Correo electrónico
-            </Form.Label>
-            <Form.Control 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
+          {error && (
+            <Alert variant="danger" style={{ marginBottom: '24px', borderRadius: '14px' }}>
+              {error}
+            </Alert>
+          )}
+
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Correo electrónico</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                style={{ borderRadius: '14px', padding: '14px', border: '1px solid rgba(255,255,255,0.12)', background: '#12091d', color: 'white', fontSize: '15px' }}
+                placeholder="tu@email.com"
+              />
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Contraseña</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ borderRadius: '14px', padding: '14px', border: '1px solid rgba(255,255,255,0.12)', background: '#12091d', color: 'white', fontSize: '15px' }}
+                  placeholder="••••••••"
+                />
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
+                  style={{ borderRadius: '0 14px 14px 0', borderColor: '#f2c94c', color: '#1a1a1a', background: '#f2c94c' }}
+                  type="button"
+                >
+                  {showPassword ? 'Ocultar' : 'Mostrar'}
+                </Button>
+              </InputGroup>
+            </Form.Group>
+            <Button
+              type="submit"
+              variant="light"
+              style={{ width: '100%', backgroundColor: '#f2c94c', borderColor: '#f2c94c', color: '#1a1a1a', padding: '14px', borderRadius: '14px', fontWeight: '700', fontSize: '15px', boxShadow: '0 12px 24px rgba(242, 201, 76, 0.22)' }}
               disabled={loading}
-              style={{
-                borderRadius: '8px',
-                padding: '12px',
-                border: '1px solid #ddd',
-                fontSize: '14px'
-              }}
-              placeholder="tu@email.com"
-            />
-          </Form.Group>
+            >
+              {loading ? (
+                <>
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" style={{ marginRight: '8px' }} />
+                  Procesando...
+                </>
+              ) : 'Ingresar'}
+            </Button>
+          </Form>
 
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#333' }}>
-              Contraseña
-            </Form.Label>
-            <Form.Control 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-              disabled={loading}
-              style={{
-                borderRadius: '8px',
-                padding: '12px',
-                border: '1px solid #ddd',
-                fontSize: '14px'
-              }}
-              placeholder="••••••••"
-            />
-          </Form.Group>
-
-          <Button 
-            type="submit" 
-            style={{
-              width: '100%',
-              background: 'linear-gradient(135deg, #0b61d6 0%, #3aa0ff 100%)',
-              border: 'none',
-              padding: '12px',
-              borderRadius: '8px',
-              fontWeight: '600',
-              fontSize: '15px'
-            }}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" style={{ marginRight: '8px' }} /> 
-                Procesando...
-              </>
-            ) : 'Ingresar'}
-          </Button>
-        </Form>
-
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
-          <p style={{ color: '#666', fontSize: '14px', margin: '0 0 12px 0' }}>
-            ¿No tienes cuenta?
-          </p>
-          <Link 
-            to="/register" 
-            style={{
-              color: '#0b61d6',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '14px'
-            }}
-          >
-            Regístrate aquí
-          </Link>
-        </div>
-
-        {/* Demo Credentials */}
-        <div style={{
-          marginTop: '30px',
-          padding: '16px',
-          background: '#f0f4f8',
-          borderRadius: '8px',
-          fontSize: '12px',
-          color: '#666'
-        }}>
-          <p style={{ fontWeight: '600', marginBottom: '8px' }}>Demo (prueba rápida):</p>
-          <p style={{ margin: '4px 0' }}>👤 Admin: admin@sportclub.cl</p>
-          <p style={{ margin: '4px 0' }}>🔑 Pass: 123456</p>
+          <div style={{ textAlign: 'center', marginTop: '24px' }}>
+            <p style={{ marginBottom: '12px', color: '#a8a5b6' }}>¿No tienes cuenta?</p>
+            <Link to="/register" style={{ backgroundColor: '#f2c94c', color: '#1a1a1a', padding: '12px 22px', borderRadius: '999px', textDecoration: 'none', fontWeight: '700', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #f2c94c' }}>
+              Regístrate aquí
+            </Link>
+          </div>
         </div>
       </div>
     </div>

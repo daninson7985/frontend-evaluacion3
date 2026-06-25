@@ -17,7 +17,12 @@ function UsersPage() {
       const data = await getUsers();
       setUsers(data.data);
     } catch (err) {
-      Swal.fire("Error", err.message || "No se pudieron cargar los usuarios", "error");
+      Swal.fire({
+        title: "Error",
+        text: err.message || "No se pudieron cargar los usuarios",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
     } finally {
       setLoading(false);
     }
@@ -30,15 +35,30 @@ function UsersPage() {
     try {
       if (selectedUser) {
         await updateUser(selectedUser.id, formData);
-        Swal.fire("Éxito", "Usuario actualizado correctamente", "success");
+        Swal.fire({
+          title: "Éxito",
+          text: "Usuario actualizado correctamente",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
       } else {
         await createUser(formData);
-        Swal.fire("Éxito", "Usuario creado correctamente", "success");
+        Swal.fire({
+          title: "Éxito",
+          text: "Usuario creado correctamente",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
       }
       setShowModal(false);
       await loadUsers();
     } catch (error) {
-      Swal.fire("Error", error.message || "Ocurrió un error al guardar", "error");
+      Swal.fire({
+        title: "Error",
+        text: error.message || "Ocurrió un error al guardar",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
     } finally {
       setOpLoading(false);
     }
@@ -46,26 +66,42 @@ function UsersPage() {
 
   const handleDelete = async (user) => {
     const result = await Swal.fire({
-      title: "¿Eliminar usuario?",
-      text: `Se eliminará a ${user.full_name}`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#d33",
-    });
-
+        title: "¿Eliminar usuario?",
+        text: `Esta acción no se puede deshacer. Se eliminará a ${user.full_name}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#d33",
+      });
     if (result.isConfirmed) {
       setOpLoading(true);
       try {
         await deleteUser(user.id);
-        Swal.fire("Eliminado", "El usuario ha sido eliminado", "success");
+        Swal.fire({
+          title: "Eliminado",
+          text: "El usuario ha sido eliminado",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
         await loadUsers();
       } catch (err) {
-        Swal.fire("Error", err.message || "Error al eliminar", "error");
+        Swal.fire({
+          title: "Error",
+          text: err.message || "Error al eliminar",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
       } finally {
         setOpLoading(false);
       }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire({
+        title: "Advertencia",
+        text: "No se eliminó al usuario.",
+        icon: "warning",
+        confirmButtonText: "Entendido",
+      });
     }
   };
 
@@ -73,7 +109,7 @@ function UsersPage() {
     <Card className="shadow-sm">
       <Card.Header className="d-flex justify-content-between align-items-center">
         <h4 className="mb-0">Gestión de Usuarios</h4>
-        <Button variant="danger" onClick={() => { setSelectedUser(null); setShowModal(true); }}>
+        <Button variant="success" onClick={() => { setSelectedUser(null); setShowModal(true); }}>
           Nuevo Usuario
         </Button>
       </Card.Header>

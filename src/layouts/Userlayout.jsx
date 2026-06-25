@@ -28,7 +28,9 @@ function UserLayout() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'white' }} />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Link className="nav-link" to="/user/dashboard" style={{ color: 'white', fontWeight: '500' }}>Dashboard</Link>
+              <Link className="nav-link" to="/" style={{ color: 'white', fontWeight: '500' }}>Inicio</Link>
+              <Link className="nav-link" to="/user/dashboard" style={{ color: 'white', fontWeight: '500' }}>Panel</Link>
+              <Link className="nav-link" to="/user/classes" style={{ color: 'white', fontWeight: '500' }}>Clases</Link>
               <Link className="nav-link" to="/user/profile" style={{ color: 'white', fontWeight: '500' }}>Mi Perfil</Link>
               <span style={{ color: 'white', marginRight: '15px', display: 'flex', alignItems: 'center' }}>{user?.full_name}</span>
               <Button variant="outline-light" onClick={handleLogout}>Cerrar Sesión</Button>

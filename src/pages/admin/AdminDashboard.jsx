@@ -1,27 +1,79 @@
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
+import { useEffect, useMemo, useState } from "react";
+import { Container, Row, Col, Table, Button, Spinner, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { getUsers } from "../../services/userService";
 
 function AdminDashboard() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await getUsers();
+        setUsers(response.data || []);
+      } catch (err) {
+        setError(err.message || "No se pudieron cargar los usuarios");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUsers();
+  }, []);
+
+  const userCounts = useMemo(() => {
+    return {
+      total: users.length,
+      admin: users.filter((user) => user.role === "admin").length,
+      coach: users.filter((user) => user.role === "coach").length,
+      user: users.filter((user) => user.role === "user").length,
+    };
+  }, [users]);
+
+  const refreshUsers = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await getUsers();
+      setUsers(response.data || []);
+    } catch (err) {
+      setError(err.message || "No se pudieron cargar los usuarios");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Container>
       {/* Hero Section */}
       <div className="hero-section">
-        <h1>Panel de Administrador</h1>
-        <p>Control total del sistema. Gestiona usuarios, coaches, clases y más</p>
+        <div>
+          <h1>Panel de Administrador</h1>
+          <p>Control total del sistema. Gestiona usuarios, coaches, clases y más</p>
+        </div>
       </div>
 
       {/* Stats */}
+      {error && <Alert variant="danger">{error}</Alert>}
       <div className="stats-container">
         <div className="stat-card">
-          <div className="stat-number">124</div>
+          <div className="stat-number">{loading ? <Spinner animation="border" size="sm" /> : userCounts.total}</div>
           <div className="stat-label">Usuarios Totales</div>
         </div>
         <div className="stat-card">
-          <div className="stat-number">12</div>
+          <div className="stat-number">{loading ? <Spinner animation="border" size="sm" /> : userCounts.user}</div>
+          <div className="stat-label">Usuarios Estándar</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-number">{loading ? <Spinner animation="border" size="sm" /> : userCounts.coach}</div>
           <div className="stat-label">Coaches Activos</div>
         </div>
         <div className="stat-card">
-          <div className="stat-number">45</div>
-          <div className="stat-label">Clases Disponibles</div>
+          <div className="stat-number">{loading ? <Spinner animation="border" size="sm" /> : userCounts.admin}</div>
+          <div className="stat-label">Administradores</div>
         </div>
       </div>
 
@@ -34,7 +86,7 @@ function AdminDashboard() {
             </div>
             <div className="feature-card-body">
               <p>Crear, editar y eliminar usuarios del sistema. Controla roles y permisos.</p>
-              <Button className="btn-theme">Administrar Usuarios</Button>
+              <Button as={Link} to="/admin/users" className="btn-theme">Administrar Usuarios</Button>
             </div>
           </div>
         </Col>
@@ -45,7 +97,7 @@ function AdminDashboard() {
             </div>
             <div className="feature-card-body">
               <p>Administra los coaches del club. Asigna clases y supervisa su desempeño.</p>
-              <Button className="btn-theme">Administrar Coaches</Button>
+                <Button as={Link} to="/admin/coaches" className="btn-theme">Administrar Coaches</Button>
             </div>
           </div>
         </Col>
@@ -56,7 +108,7 @@ function AdminDashboard() {
             </div>
             <div className="feature-card-body">
               <p>Crea, edita y supervisa todas las clases del club. Controla horarios.</p>
-              <Button className="btn-theme">Administrar Clases</Button>
+              <Button as={Link} to="/admin/classes" className="btn-theme">Administrar Clases</Button>
             </div>
           </div>
         </Col>
@@ -78,18 +130,28 @@ function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Juan Pérez</td>
-                <td>juan@mail.com</td>
-                <td>user</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Ana Gómez</td>
-                <td>ana@mail.com</td>
-                <td>coach</td>
-              </tr>
+              {loading ? (
+                <tr>
+                  <td colSpan={4} className="text-center py-4">
+                    <Spinner animation="border" /> Cargando usuarios...
+                  </td>
+                </tr>
+              ) : users.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="text-center py-4">
+                    No hay usuarios disponibles.
+                  </td>
+                </tr>
+              ) : (
+                users.slice(0, 4).map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.full_name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </div>

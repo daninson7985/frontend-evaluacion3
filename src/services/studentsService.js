@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_URL || null;
+import { getUsers } from "./userService";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const STUDENTS_STORAGE_KEY = "sportclub_students";
 
 function getHeaders(hasBody = true) {
@@ -54,6 +56,24 @@ export async function getStudents() {
       const data = await handleResponse(res, "Error obteniendo alumnos");
       return { data: data.data || data };
     } catch {
+      try {
+        const users = await getUsers();
+        const students = (users.data || []).filter((user) => user.role === "user");
+        if (students.length > 0) {
+          return {
+            data: students.map((student) => ({
+              id: student.id,
+              full_name: student.full_name,
+              email: student.email,
+              class_name: student.metadata?.sports?.[0]?.name || "Sin clase asignada",
+              progress: student.metadata?.progress || "—",
+              attendance: student.metadata?.attendance || "—"
+            }))
+          };
+        }
+      } catch {
+        // ignore and fallback to local students
+      }
       return { data: loadLocalStudents() };
     }
   }

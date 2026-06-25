@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_URL || null;
+import { getUsers } from "./userService";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const SPECIALTIES_STORAGE_KEY = "sportclub_specialties";
 
 function getHeaders(hasBody = true) {
@@ -54,6 +56,22 @@ export async function getSpecialties() {
       const data = await handleResponse(res, "Error obteniendo especialidades");
       return { data: data.data || data };
     } catch {
+      try {
+        const users = await getUsers();
+        const coaches = (users.data || []).filter((user) => user.role === "coach");
+        if (coaches.length > 0) {
+          return {
+            data: coaches.map((coach) => ({
+              id: coach.id,
+              name: coach.metadata?.specialty || `Especialidad de ${coach.full_name}`,
+              description: coach.metadata?.specialty ? `Especialidad del coach ${coach.full_name}` : "Especialidad sin definir",
+              level: coach.metadata?.specialty ? "Avanzado" : "—"
+            }))
+          };
+        }
+      } catch {
+        // ignore and fallback to local specialties
+      }
       return { data: loadLocalSpecialties() };
     }
   }

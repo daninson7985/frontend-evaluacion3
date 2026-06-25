@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Spinner, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { getErrorMessage } from "../../utils/errorMessage";
 import { getProfile } from "../../services/authService";
 
 function CoachDashboard() {
@@ -16,7 +17,7 @@ function CoachDashboard() {
         const data = await getProfile();
         setProfile(data);
       } catch (err) {
-        setError(err.message || "No se pudo cargar el perfil");
+        setError(getErrorMessage(err, "No se pudo cargar el perfil"));
       } finally {
         setLoading(false);
       }
@@ -36,7 +37,7 @@ function CoachDashboard() {
       const data = await getProfile();
       setProfile(data);
     } catch (err) {
-      setError(err.message || "No se pudo cargar el perfil");
+      setError(getErrorMessage(err, "No se pudo cargar el perfil"));
     } finally {
       setLoading(false);
     }

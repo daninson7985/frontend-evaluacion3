@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../utils/errorMessage";
 import { registerUser, saveSession } from "../services/authService";
 
 function Register() {
@@ -28,10 +29,6 @@ function Register() {
     const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
     if (!hasSpecialChar) {
       return "La contraseña debe contener al menos un carácter especial.";
-    }
-    const allCharsUnique = new Set(password).size === password.length;
-    if (!allCharsUnique) {
-      return "La contraseña no debe repetir caracteres.";
     }
     return null;
   };
@@ -60,7 +57,7 @@ function Register() {
         navigate("/login");
       }
     } catch (err) {
-      const message = err.message || "Ocurrió un error al registrar";
+      const message = getErrorMessage(err, "Ocurrió un error al registrar");
       setError(message);
       Swal.fire({
         title: "Contraseña inválida",
@@ -133,7 +130,7 @@ function Register() {
               />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Contraseña (mayúscula, carácter especial y sin repetidos)</Form.Label>
+              <Form.Label style={{ fontWeight: '600', marginBottom: '8px', color: '#e7e7f3' }}>Contraseña (mayúscula y carácter especial)</Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showPassword ? "text" : "password"}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Card, Button, Spinner, Alert, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../../utils/errorMessage";
 import { getProfile, updateSessionUser } from "../../services/authService";
 import { updateUser } from "../../services/userService";
 import ProfileFormModal from "../../components/ProfileFormModal";
@@ -21,7 +22,7 @@ function CoachProfile() {
         const data = await getProfile();
         setProfile(data);
       } catch (err) {
-        setError(err.message || "No se pudo cargar el perfil");
+        setError(getErrorMessage(err, "No se pudo cargar el perfil"));
       } finally {
         setLoading(false);
       }
@@ -55,7 +56,7 @@ function CoachProfile() {
     } catch (err) {
       Swal.fire({
         title: "Error",
-        text: err.message || "No se pudo actualizar el perfil.",
+        text: getErrorMessage(err, "No se pudo actualizar el perfil."),
         icon: "error",
         confirmButtonText: "Aceptar",
       });

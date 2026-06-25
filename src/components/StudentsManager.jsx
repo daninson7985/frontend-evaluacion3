@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Table, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../utils/errorMessage";
 import { createStudent, deleteStudent, getStudents, updateStudent } from "../services/studentsService";
 import StudentFormModal from "./StudentFormModal";
 
@@ -19,7 +20,7 @@ function StudentsManager({ title, subtitle, emptyText }) {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "No se pudieron cargar los alumnos",
+        text: getErrorMessage(error, "No se pudieron cargar los alumnos"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -58,7 +59,7 @@ function StudentsManager({ title, subtitle, emptyText }) {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "Ocurrió un error al guardar el alumno",
+        text: getErrorMessage(error, "Ocurrió un error al guardar el alumno"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -92,7 +93,7 @@ function StudentsManager({ title, subtitle, emptyText }) {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: error.message || "No se pudo eliminar el alumno",
+          text: getErrorMessage(error, "No se pudo eliminar el alumno"),
           icon: "error",
           confirmButtonText: "Aceptar",
         });

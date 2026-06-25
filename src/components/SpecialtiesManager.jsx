@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Table, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../utils/errorMessage";
 import { createSpecialty, deleteSpecialty, getSpecialties, updateSpecialty } from "../services/specialtiesService";
 import SpecialtyFormModal from "./SpecialtyFormModal";
 
@@ -19,7 +20,7 @@ function SpecialtiesManager({ title, subtitle, emptyText }) {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "No se pudieron cargar las especialidades",
+        text: getErrorMessage(error, "No se pudieron cargar las especialidades"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -58,7 +59,7 @@ function SpecialtiesManager({ title, subtitle, emptyText }) {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "Ocurrió un error al guardar la especialidad",
+        text: getErrorMessage(error, "Ocurrió un error al guardar la especialidad"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -92,7 +93,7 @@ function SpecialtiesManager({ title, subtitle, emptyText }) {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: error.message || "No se pudo eliminar la especialidad",
+          text: getErrorMessage(error, "No se pudo eliminar la especialidad"),
           icon: "error",
           confirmButtonText: "Aceptar",
         });

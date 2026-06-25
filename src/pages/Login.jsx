@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Form, InputGroup, Spinner } from "react-bootstrap";
+import { getErrorMessage } from "../utils/errorMessage";
 import { loginUser, saveSession } from "../services/authService";
 
 function Login() {
@@ -24,7 +25,7 @@ function Login() {
       else if (role === "coach") navigate("/coach/dashboard");
       else navigate("/user/dashboard");
     } catch (err) {
-      setError(err.message || "Ocurrió un error");
+      setError(getErrorMessage(err, "Ocurrió un error"));
     } finally {
       setLoading(false);
     }

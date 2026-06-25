@@ -1,5 +1,5 @@
-// userService with optional backend integration via VITE_API_URL
-const API_BASE = import.meta.env.VITE_API_URL || null;
+// userService with backend integration via VITE_API_URL or default URL
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const DELETE_FALLBACK_KEY = "sportclub_deleted_user_ids";
 
 function getHeaders(hasBody = true) {

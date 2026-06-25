@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Table } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../../utils/errorMessage";
 import UserFormModal from "../../components/UserFormModal";
 import { createUser, deleteUser, getUsers, updateUser } from "../../services/userService";
 
@@ -19,7 +20,7 @@ function UsersPage() {
     } catch (err) {
       Swal.fire({
         title: "Error",
-        text: err.message || "No se pudieron cargar los usuarios",
+        text: getErrorMessage(err, "No se pudieron cargar los usuarios"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -55,7 +56,7 @@ function UsersPage() {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "Ocurrió un error al guardar",
+        text: getErrorMessage(error, "Ocurrió un error al guardar"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -88,7 +89,7 @@ function UsersPage() {
       } catch (err) {
         Swal.fire({
           title: "Error",
-          text: err.message || "Error al eliminar",
+          text: getErrorMessage(err, "Error al eliminar"),
           icon: "error",
           confirmButtonText: "Aceptar",
         });

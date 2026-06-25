@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || null;
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const CLASSES_STORAGE_KEY = "sportclub_classes";
 
 function getHeaders(hasBody = true) {

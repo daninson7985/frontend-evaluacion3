@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { Button, Card, Table } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../../utils/errorMessage";
 import UserFormModal from "../../components/UserFormModal";
 import { createUser, deleteUser, getUsers, updateUser } from "../../services/userService";
 
@@ -19,7 +20,7 @@ function AdminCoaches() {
     } catch (err) {
       Swal.fire({
         title: "Error",
-        text: err.message || "No se pudieron cargar los coaches",
+        text: getErrorMessage(err, "No se pudieron cargar los coaches"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -56,7 +57,7 @@ function AdminCoaches() {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "Ocurrió un error al guardar el coach",
+        text: getErrorMessage(error, "Ocurrió un error al guardar el coach"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -90,7 +91,7 @@ function AdminCoaches() {
       } catch (err) {
         Swal.fire({
           title: "Error",
-          text: err.message || "No se pudo eliminar el coach",
+          text: getErrorMessage(err, "No se pudo eliminar el coach"),
           icon: "error",
           confirmButtonText: "Aceptar",
         });

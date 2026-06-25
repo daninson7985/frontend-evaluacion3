@@ -38,10 +38,6 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser, fixedRole 
     if (!hasSpecialChar) {
       return "La contraseña debe contener al menos un carácter especial.";
     }
-    const allCharsUnique = new Set(password).size === password.length;
-    if (!allCharsUnique) {
-      return "La contraseña no debe repetir caracteres.";
-    }
     return null;
   };
 
@@ -135,7 +131,7 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser, fixedRole 
             />
             {!selectedUser && (
               <Form.Text className="text-muted">
-                Debe incluir al menos una letra mayúscula, un carácter especial y no repetir caracteres.
+                Debe incluir al menos una letra mayúscula y un carácter especial.
               </Form.Text>
             )}
             {error && <Form.Text className="text-danger">{error}</Form.Text>}

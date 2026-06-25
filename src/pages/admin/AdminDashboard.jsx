@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Container, Row, Col, Table, Button, Spinner, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { getErrorMessage } from "../../utils/errorMessage";
 import { getUsers } from "../../services/userService";
 
 function AdminDashboard() {
@@ -16,7 +17,7 @@ function AdminDashboard() {
         const response = await getUsers();
         setUsers(response.data || []);
       } catch (err) {
-        setError(err.message || "No se pudieron cargar los usuarios");
+        setError(getErrorMessage(err, "No se pudieron cargar los usuarios"));
       } finally {
         setLoading(false);
       }
@@ -40,7 +41,7 @@ function AdminDashboard() {
       const response = await getUsers();
       setUsers(response.data || []);
     } catch (err) {
-      setError(err.message || "No se pudieron cargar los usuarios");
+      setError(getErrorMessage(err, "No se pudieron cargar los usuarios"));
     } finally {
       setLoading(false);
     }

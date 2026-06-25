@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Table, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../utils/errorMessage";
 import { createClass, deleteClass, getClasses, updateClass } from "../services/classesService";
 import ClassFormModal from "./ClassFormModal";
 
@@ -19,7 +20,7 @@ function ClassesManager({ title, subtitle, emptyText, canEdit = true }) {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "No se pudieron cargar las clases",
+        text: getErrorMessage(error, "No se pudieron cargar las clases"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -58,7 +59,7 @@ function ClassesManager({ title, subtitle, emptyText, canEdit = true }) {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        text: error.message || "Ocurrió un error al guardar la clase",
+        text: getErrorMessage(error, "Ocurrió un error al guardar la clase"),
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -92,7 +93,7 @@ function ClassesManager({ title, subtitle, emptyText, canEdit = true }) {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: error.message || "No se pudo eliminar la clase",
+          text: getErrorMessage(error, "No se pudo eliminar la clase"),
           icon: "error",
           confirmButtonText: "Aceptar",
         });

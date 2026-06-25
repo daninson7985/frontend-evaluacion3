@@ -1,5 +1,5 @@
-// authService with fallback to mocks. If VITE_API_URL is set, requests go to the backend.
-const API_BASE = import.meta.env.VITE_API_URL || null;
+// authService with fallback to mocks. Requests go to the backend by default.
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const MOCK_STORAGE_KEY = "sportclub_mock_users";
 
 const defaultMockUsers = [
